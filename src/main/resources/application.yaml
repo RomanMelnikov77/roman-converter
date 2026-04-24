@@ -1,3 +1,19 @@
 spring:
   application:
     name: roman-parser
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  rabbitmq:
+    listener:
+      simple:
+        default-requeue-rejected: false
+
+deepseek:
+  base-url: https://api.deepseek.com
+  api-key: ${DEEPSEEK_API_KEY:}
+
+server:
+  tomcat:
+    max-swallow-size: 52428800
