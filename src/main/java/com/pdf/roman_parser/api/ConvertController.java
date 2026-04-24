@@ -1,6 +1,5 @@
 package com.pdf.roman_parser.api;
 
-import com.pdf.roman_parser.pipeline.queue.ConversionJobPublisher;
 import com.pdf.roman_parser.service.PdfToDocxService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ContentDisposition;
@@ -24,11 +23,8 @@ public class ConvertController {
     private static final long MAX_BYTES = 50L * 1024 * 1024;
 
     private final PdfToDocxService service;
-    private final ConversionJobPublisher jobPublisher;
-
-    public ConvertController(PdfToDocxService service, ConversionJobPublisher jobPublisher) {
+    public ConvertController(PdfToDocxService service) {
         this.service = service;
-        this.jobPublisher = jobPublisher;
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -41,7 +37,6 @@ public class ConvertController {
         }
 
         byte[] pdfBytes = file.getBytes();
-        jobPublisher.publish(pdfBytes);
         byte[] docx = service.convert(pdfBytes).get(5, TimeUnit.MINUTES);
 
         HttpHeaders headers = new HttpHeaders();
